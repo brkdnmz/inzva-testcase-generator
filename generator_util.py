@@ -1,5 +1,5 @@
 import random
-from typing import List
+from typing import List, Tuple
 
 from numba import njit
 
@@ -157,3 +157,35 @@ def next_prime(n: int) -> int:
     while not is_prime(n):
         n += 1
     return n
+
+
+def gen_tree(n: int, parent_dist: int = 10**9, root: int = 1) -> List[Tuple[int, int]]:
+    """Generates a tree with `n` nodes. Returns the bidirectional edges forming the tree.
+
+    Args:
+        n (int): The number of nodes. The nodes are numbered `1...n`.
+        parent_dist (int, optional): Each node's parent will be added to the tree at most `parent_dist` nodes before itself. Defaults to `10**9`.
+        root (int, optional): The root node's number. Defaults to `1`.
+    Returns:
+        List[Tuple[int, int]]: `n - 1` bidirectional edges, each represented with two node numbers `u` and `v` which are connected by that edge.
+    """
+
+    assert 1 <= n, "There must be at least 1 node"
+    assert 0 <= parent_dist, "`parent_dist` must be positive"
+
+    nodes = list(range(1, n))
+    nodes.remove(root)
+    random.shuffle(nodes)
+    nodes.insert(0, root)
+    edges: List[Tuple[int, int]] = []
+    for node_index, node in enumerate(nodes):
+        # Ignore the root
+        if not node_index:
+            continue
+        parent_index = random.choice(range(max(0, node_index - parent_dist), node_index))
+        parent = nodes[parent_index]
+        u, v = node, parent
+        if randint(0, 1):
+            u, v = v, u
+        edges.append((u, v))
+    return edges
