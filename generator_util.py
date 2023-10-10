@@ -180,7 +180,7 @@ def gen_tree(n: int, parent_dist: int = 10**9, root: int = 1) -> List[Tuple[int,
     assert 1 <= n, "There must be at least 1 node"
     assert 0 <= parent_dist, "`parent_dist` must be positive"
 
-    nodes = list(range(1, n))
+    nodes = list(range(1, n + 1))
     nodes.remove(root)
     random.shuffle(nodes)
     nodes.insert(0, root)
