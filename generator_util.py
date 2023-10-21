@@ -179,6 +179,7 @@ def gen_tree(n: int, parent_dist: int = 10**9, root: int = 1) -> List[Tuple[int,
 
     assert 1 <= n, "There must be at least 1 node"
     assert 0 <= parent_dist, "`parent_dist` must be positive"
+    assert 1 <= root <= n, "The root's number must be within [1, n]"
 
     nodes = list(range(1, n + 1))
     nodes.remove(root)
@@ -197,3 +198,68 @@ def gen_tree(n: int, parent_dist: int = 10**9, root: int = 1) -> List[Tuple[int,
         edges.append((u, v))
     random.shuffle(edges)
     return edges
+
+
+def gen_chain_tree(n: int, root: int = 1) -> List[Tuple[int, int]]:
+    """Generates a tree rooted at node `1`, where each non-leaf node has exactly 1 child.
+
+    Args:
+        n (int): The number of nodes. The nodes are numbered `1...n`.
+
+    Returns:
+        List[Tuple[int, int]]: `n - 1` bidirectional edges, each represented with two node numbers `u` and `v` which are connected by that edge.
+    """
+
+    return gen_tree(n, 1, root)
+
+
+def gen_blossom_tree(n: int, root: int = 1) -> List[Tuple[int, int]]:
+    """Generates a tree rooted at node `1`, where each node except the root is a leaf node.
+
+    Args:
+        n (int): The number of nodes. The nodes are numbered `1...n`.
+
+    Returns:
+        List[Tuple[int, int]]: `n - 1` bidirectional edges, each represented with two node numbers `u` and `v` which are connected by that edge.
+    """
+
+    assert 1 <= n, "There must be at least 1 node"
+    assert 1 <= root <= n, "The root's number must be within [1, n]"
+
+    nodes = list(range(1, n + 1))
+    nodes.remove(root)
+    random.shuffle(nodes)
+    edges: List[Tuple[int, int]] = []
+    for node in nodes:
+        u, v = node, root
+        if randint(0, 1):
+            u, v = v, u
+        edges.append((u, v))
+    return edges
+
+
+def gen_random_tree(n: int) -> List[Tuple[int, int]]:
+    """An exemplary random tree generator. Change the parameters however you want.
+
+    Args:
+        n (int): The number of nodes.
+
+    Returns:
+        List[Tuple[int, int]]: The list of edges.
+    """
+
+    pick = random.random()
+    if pick <= 0.2:
+        return gen_chain_tree(n)
+    elif pick <= 0.4:
+        return gen_blossom_tree(n)
+    elif pick <= 0.6:
+        return gen_tree(n, 5)
+    elif pick <= 0.7:
+        return gen_tree(n, 10)
+    elif pick <= 0.8:
+        return gen_tree(n, 100)
+    elif pick <= 0.9:
+        return gen_tree(n, 1000)
+    else:
+        return gen_tree(n, n)
