@@ -195,4 +195,5 @@ def gen_tree(n: int, parent_dist: int = 10**9, root: int = 1) -> List[Tuple[int,
         if randint(0, 1):
             u, v = v, u
         edges.append((u, v))
+    random.shuffle(edges)
     return edges
