@@ -31,8 +31,9 @@ This file contains common utility functions such as **random number generators**
 The actual stuff is done here. There are several classes inside this file:
 
 1. `class Input`: Defines and wraps the parameters forming the input of a single test case file. Since it varies from problem to problem, you should rewrite it for each problem.
-2. `class Constraints`: Defines and wraps all the constraints. Its `validate` method takes in a single `Input` instance and validates it by the validation code, which you should write (I suggest `assert`). If the given `Input` instance violates the contraints, it raises `AssertionError`.
-3. `class InputGenerator`: Implement all your generators with their particular generation logics inside this class. `main.py` calls its `generate` method to generate the inputs.
+2. `class Bounds`: Since constraints generally have a lower and an upper bound, it felt more proper to wrap the bounds with a class.
+3. `class Constraints`: Defines and wraps all the constraints. Its `validate` method takes in a single `Input` instance and validates it by the validation code, which you should write (I suggest `assert`). If the given `Input` instance violates the contraints, it raises `AssertionError`.
+4. `class InputGenerator`: Implement all your generators with their particular generation logics inside this class. `main.py` calls its `generate` method to generate the inputs.
 
 ### `playgroung.ipynb`
 
