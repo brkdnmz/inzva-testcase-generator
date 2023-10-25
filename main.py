@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 from glob import glob
 from typing import List
@@ -37,6 +38,13 @@ class GeneratorSystem:
         for inputFile in tqdm(glob(f"{GeneratorSystem.INPUT_DIR}/*")):
             self.__runSolver(inputFile)
 
+    def __zipTestCases(self) -> None:
+        print("Zipping the test cases into `testcases.zip`...")
+        shutil.copytree("input", "testcases/input")
+        shutil.copytree("output", "testcases/output")
+        shutil.make_archive("testcases", "zip", "testcases")
+        shutil.rmtree("testcases")
+
     def __compileSolver(self) -> None:
         subprocess.run(["g++", "sol.cpp", "-O2"])
 
@@ -49,6 +57,7 @@ class GeneratorSystem:
         self.__prepareIOFolders()
         self.__generateInputFiles()
         self.__generateOutputFiles()
+        self.__zipTestCases()
 
 
 if __name__ == "__main__":
