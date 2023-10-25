@@ -29,73 +29,82 @@ class Input:
         self.a = a
 
 
+# Most constraints are usually in the following form:
+#   - 1 <= n <= 2 * 10^5
+# Here, 1 is the lower bound and 2 * 10^5 is the upper bound.
+# So, this `Bounds` class helps wrapping the bounds in a proper way.
+class Bounds:
+    lower: int
+    upper: int
+
+    def __init__(self, lower: int, upper: int) -> None:
+        self.lower = lower
+        self.upper = upper
+
+
 # This class will help us using proper parameters when generating random numbers.
 # Also, it can validate a custom input -- whether it satisfies the constraints.
 class Constraints:
     # You must check for each constraint given in the problem statement.
     # So, declare the necessary constraints here.
     # Of course, name them as you prefer!
-    N_LOWER: int
-    N_UPPER: int
-    ELEM_LOWER: int
-    ELEM_UPPER: int
+    n_bounds: Bounds
+    elem_bounds: Bounds
 
-    def __init__(self, n_lower: int, n_upper: int, elem_lower: int, elem_upper: int) -> None:
-        self.N_LOWER = n_lower
-        self.N_UPPER = n_upper
-        self.ELEM_LOWER = elem_lower
-        self.ELEM_UPPER = elem_upper
+    def __init__(self, n_bounds: Bounds, elem_bounds: Bounds) -> None:
+        self.n_bounds = n_bounds
+        self.elem_bounds = elem_bounds
 
     # This method will be used to validate inputs.
     def validate(self, input: Input) -> None:
-        assert self.N_LOWER <= input.n <= self.N_UPPER
+        assert self.n_bounds.lower <= input.n <= self.n_bounds.upper
         assert input.n == len(input.a)
-        assert (self.ELEM_LOWER <= x <= self.ELEM_UPPER for x in input.a)
+        assert (self.elem_bounds.lower <= x <= self.elem_bounds.upper for x in input.a)
 
 
 # Implement your various input generator algorithms inside this class.
 class InputGenerator:
     # Here, you can define your constraints.
     # You may also choose to define specific constraint per each generator.
-    generalConstraints = Constraints(n_lower=1, n_upper=2 * 10**5, elem_lower=-(10**9), elem_upper=10**9)
-    # smallConstraints = Constraints(n_lower=1, n_upper=100, elem_lower=-100, elem_upper=100)
-    # midConstraints = Constraints(n_lower=10**2 + 1, n_upper=10**5, elem_lower=-100, elem_upper=100)
+    generalConstraints = Constraints(n_bounds=Bounds(1, 2 * 10**5), elem_bounds=Bounds(-(10**9), 10**9))
+    # smallConstraints = Constraints(n_bounds=Bounds(1, 100), elem_bounds=Bounds(-100, 100))
+    # midConstraints = Constraints(n_bounds=Bounds(10**2 + 1, 10**5), elem_bounds=Bounds(-100, 100))
     # ...
 
     ### IMPLEMENT GENERATORS BEGIN ###
 
     def all_random(self) -> Input:
         constraints = self.generalConstraints
-        n = randint(constraints.N_LOWER, constraints.N_UPPER)
-        a = randints(n, constraints.ELEM_LOWER, constraints.ELEM_UPPER)
+        n = randint(constraints.n_bounds.lower, constraints.n_bounds.upper)
+        a = randints(n, constraints.elem_bounds.lower, constraints.elem_bounds.upper)
         input = Input(n, a)
         return self.validateAndReturn(input, constraints)
 
     def small_random(self) -> Input:
-        constraints = Constraints(n_lower=1, n_upper=100, elem_lower=0, elem_upper=100)
-        n = randint(constraints.N_LOWER, constraints.N_UPPER)
-        a = randints(n, constraints.ELEM_LOWER, constraints.ELEM_UPPER)
+        constraints = Constraints(n_bounds=Bounds(1, 100), elem_bounds=Bounds(0, 100))
+        n = randint(constraints.n_bounds.lower, constraints.n_bounds.upper)
+        a = randints(n, constraints.elem_bounds.lower, constraints.elem_bounds.upper)
         input = Input(n, a)
         return self.validateAndReturn(input, constraints)
 
     def n_max(self) -> Input:
         constraints = self.generalConstraints
-        n = constraints.N_UPPER
-        a = randints(n, constraints.ELEM_LOWER, constraints.ELEM_UPPER)
+        n = constraints.n_bounds.upper
+        a = randints(n, constraints.elem_bounds.lower, constraints.elem_bounds.upper)
         input = Input(n, a)
         return self.validateAndReturn(input, constraints)
 
     def all_different(self) -> Input:
         constraints = self.generalConstraints
-        n = constraints.N_UPPER
-        a = random.sample(range(constraints.ELEM_LOWER, constraints.ELEM_UPPER), n)
+        n = constraints.n_bounds.upper
+        a = random.sample(range(constraints.elem_bounds.lower, constraints.elem_bounds.upper + 1), n)
         input = Input(n, a)
         return self.validateAndReturn(input, constraints)
 
     def all_same(self) -> Input:
         constraints = self.generalConstraints
-        n = constraints.N_UPPER
-        a = [randint(constraints.ELEM_LOWER, constraints.ELEM_UPPER)] * n
+        n = constraints.n_bounds.upper
+        a = [randint(constraints.elem_bounds.lower, constraints.elem_bounds.upper)] * n
         input = Input(n, a)
         return self.validateAndReturn(input, constraints)
 
