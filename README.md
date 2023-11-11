@@ -38,4 +38,4 @@ The actual stuff is done here. There are several classes inside this file:
 
 ### `playgroung.ipynb`
 
-I added it just for you to see how utility generator functions inside `generator_util.py` works.
+I added it just for you to see how utility generator functions inside `generator_util.py` work.
