@@ -2,7 +2,6 @@ import os
 import shutil
 import subprocess
 from glob import glob
-from typing import List
 
 from tqdm import tqdm
 
@@ -28,7 +27,7 @@ class GeneratorSystem:
         inputs = InputGenerator().generate()
         print("Generating input files...")
         for inputIndex, input in enumerate(tqdm(inputs)):
-            with open(os.path.join(self.INPUT_DIR, f"input_{inputIndex}.txt"), "w") as inputFile:
+            with open(os.path.join(self.INPUT_DIR, f"input_{str(inputIndex).zfill(2)}.txt"), "w") as inputFile:
                 inputFile.write(f"{input.n}\n")
                 inputFile.write(" ".join(map(str, input.a)))
 
@@ -51,7 +50,7 @@ class GeneratorSystem:
     def __runSolver(self, inputFilePath: str):
         caseNo = inputFilePath.split(".")[0].split("_")[-1]
         # ./a.out for Linux!
-        subprocess.run(["./a.exe", inputFilePath, os.path.join(self.OUTPUT_DIR, f"output_{caseNo}.txt")])
+        subprocess.run(["./a.exe", inputFilePath, os.path.join(self.OUTPUT_DIR, f"output_{str(caseNo).zfill(2)}.txt")])
 
     def run(self) -> None:
         self.__prepareIOFolders()
