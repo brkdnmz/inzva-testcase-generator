@@ -91,7 +91,7 @@ class InputGenerator:
     ### IMPLEMENT GENERATORS END ###
 
     def generate(self) -> List[Input]:
-        generators = (self.all_random, self.small_random, self.n_max, self.all_different, self.all_same)
+        generators = [self.all_random, self.small_random, self.n_max, self.all_different, self.all_same]
         inputs: List[Input] = []
         print("Generating inputs...")
         for generate in tqdm(generators):
